@@ -1,11 +1,11 @@
 <x-layouts.app :title="__('Dashboard')">
     @if(session('success'))
-        <div id="successMessage" class="bg-green-500 text-white p-4 rounded mb-4">
-            {{ session('success') }}
+        <div id="successMessage" class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4" role="alert">
+            <span class="block sm:inline">{{ session('success') }}</span>
         </div>
     @endif
     @if($errors->any())
-        <div id="errorMessage" class="bg-red-500 text-white p-4 rounded mb-4">
+        <div id="errorMessage" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4" role="alert">
             <ul>
                 @foreach($errors->all() as $error)
                     <li>{{ $error }}</li>
@@ -13,114 +13,116 @@
             </ul>
         </div>
     @endif
-    <div class="flex h-full w-full flex-1 flex-col gap-4 rounded-xl">
+    <div class="flex h-full w-full flex-1 flex-col gap-6 rounded-xl">
         <!-- Statistics Cards -->
-        <div class="grid auto-rows-min gap-4 md:grid-cols-3">
-            <div class="bg-white dark:bg-gray-800 p-4 rounded-xl border border-neutral-200 dark:border-neutral-700">
-                <h3 class="text-lg font-semibold">Total Games</h3>
-                <p class="text-2xl">{{ $totalGames }}</p>
+        <div class="grid auto-rows-min gap-6 md:grid-cols-3">
+            <div class="bg-white dark:bg-gray-800 p-6 rounded-xl border border-neutral-200 dark:border-neutral-700 shadow-sm hover:shadow-md transition-shadow">
+                <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Total Games</h3>
+                <p class="text-3xl font-bold text-blue-600 mt-2">{{ $totalGames }}</p>
             </div>
-            <div class="bg-white dark:bg-gray-800 p-4 rounded-xl border border-neutral-200 dark:border-neutral-700">
-                <h3 class="text-lg font-semibold">Total Categories</h3>
-                <p class="text-2xl">{{ $totalCategories }}</p>
+            <div class="bg-white dark:bg-gray-800 p-6 rounded-xl border border-neutral-200 dark:border-neutral-700 shadow-sm hover:shadow-md transition-shadow">
+                <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Total Categories</h3>
+                <p class="text-3xl font-bold text-green-600 mt-2">{{ $totalCategories }}</p>
             </div>
-            <div class="bg-white dark:bg-gray-800 p-4 rounded-xl border border-neutral-200 dark:border-neutral-700">
-                <h3 class="text-lg font-semibold">Total Users</h3>
-                <p class="text-2xl">{{ $totalUsers }}</p>
+            <div class="bg-white dark:bg-gray-800 p-6 rounded-xl border border-neutral-200 dark:border-neutral-700 shadow-sm hover:shadow-md transition-shadow">
+                <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Total Users</h3>
+                <p class="text-3xl font-bold text-purple-600 mt-2">{{ $totalUsers }}</p>
             </div>
         </div>
         <!-- Add Form -->
-        <div class="bg-white dark:bg-gray-800 p-4 rounded-xl border border-neutral-200 dark:border-neutral-700">
-            <h3 class="text-lg font-semibold mb-4">Add New Game</h3>
-            <form action="{{ route('games.store') }}" method="POST">
+        <div class="bg-white dark:bg-gray-800 p-6 rounded-xl border border-neutral-200 dark:border-neutral-700 shadow-sm">
+            <h3 class="text-xl font-semibold mb-6 text-gray-900 dark:text-white">Add New Game</h3>
+            <form action="{{ route('games.store') }}" method="POST" class="space-y-4">
                 @csrf
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
-                        <label for="title" class="block text-sm font-medium">Title</label>
-                        <input type="text" name="title" id="title" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm" required>
-                        @error('title') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+                        <label for="title" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Title</label>
+                        <input type="text" name="title" id="title" class="mt-1 block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white" required>
+                        @error('title') <span class="text-red-500 text-sm mt-1 block">{{ $message }}</span> @enderror
                     </div>
                     <div>
-                        <label for="category_id" class="block text-sm font-medium">Category</label>
-                        <select name="category_id" id="category_id" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm bg-white dark:bg-gray-800">
+                        <label for="category_id" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Category</label>
+                        <select name="category_id" id="category_id" class="mt-1 block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white">
                             <option value="">Select Category</option>
                             @foreach($categories as $category)
                                 <option value="{{ $category->id }}">{{ $category->name }}</option>
                             @endforeach
                         </select>
-                        @error('category_id') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
-                    </div>
-                    <div>
-                        <label for="release_year" class="block text-sm font-medium">Release Year</label>
-                        <input type="number" name="release_year" id="release_year" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm" required min="1900" max="{{ date('Y') }}">
-                        @error('release_year') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+                        @error('category_id') <span class="text-red-500 text-sm mt-1 block">{{ $message }}</span> @enderror
                     </div>
                     <div class="md:col-span-2">
-                        <label for="description" class="block text-sm font-medium">Description</label>
-                        <textarea name="description" id="description" rows="3" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm"></textarea>
-                        @error('description') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+                        <label for="release_year" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Release Year</label>
+                        <input type="number" name="release_year" id="release_year" class="mt-1 block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white" required min="1900" max="{{ date('Y') }}">
+                        @error('release_year') <span class="text-red-500 text-sm mt-1 block">{{ $message }}</span> @enderror
+                    </div>
+                    <div class="md:col-span-2">
+                        <label for="description" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Description</label>
+                        <textarea name="description" id="description" rows="3" class="mt-1 block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"></textarea>
+                        @error('description') <span class="text-red-500 text-sm mt-1 block">{{ $message }}</span> @enderror
                     </div>
                 </div>
-                <button type="submit" class="mt-4 bg-blue-500 text-white px-4 py-2 rounded">Add Game</button>
+                <button type="submit" class="mt-6 bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-md font-medium transition-colors">Add Game</button>
             </form>
         </div>
         <!-- Table -->
-        <div class="bg-white dark:bg-gray-800 p-4 rounded-xl border border-neutral-200 dark:border-neutral-700">
-            <h3 class="text-lg font-semibold mb-4">Games</h3>
-            <table class="w-full table-auto">
-                <thead>
-                    <tr>
-                        <th class="px-4 py-2">Title</th>
-                        <th class="px-4 py-2">Description</th>
-                        <th class="px-4 py-2">Release Year</th>
-                        <th class="px-4 py-2">Category</th>
-                        <th class="px-4 py-2">Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach($games as $game)
-                        <tr>
-                            <td class="px-4 py-2">{{ $game->title }}</td>
-                            <td class="px-4 py-2">{{ $game->description }}</td>
-                            <td class="px-4 py-2">{{ $game->release_year }}</td>
-                            <td class="px-4 py-2">{{ $game->category ? $game->category->name : 'N/A' }}</td>
-                            <td class="px-4 py-2">
-                                <button class="bg-yellow-500 text-white px-2 py-1 rounded mr-2" data-id="{{ $game->id }}" data-title="{{ $game->title }}" data-description="{{ $game->description }}" data-release_year="{{ $game->release_year }}" data-category_id="{{ $game->category_id }}" onclick="openEditModal(this)">Edit</button>
-                                <form action="{{ route('games.destroy', $game) }}" method="POST" class="inline" onsubmit="return confirm('Are you sure you want to delete this game?')">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="bg-red-500 text-white px-2 py-1 rounded">Delete</button>
-                                </form>
-                            </td>
+        <div class="bg-white dark:bg-gray-800 p-6 rounded-xl border border-neutral-200 dark:border-neutral-700 shadow-sm">
+            <h3 class="text-xl font-semibold mb-6 text-gray-900 dark:text-white">Games</h3>
+            <div class="overflow-x-auto">
+                <table class="w-full table-auto border-collapse">
+                    <thead>
+                        <tr class="bg-gray-50 dark:bg-gray-700">
+                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Title</th>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Description</th>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Release Year</th>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Category</th>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Actions</th>
                         </tr>
-                    @endforeach
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+                        @foreach($games as $game)
+                            <tr class="hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+                                <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">{{ $game->title }}</td>
+                                <td class="px-4 py-4 text-sm text-gray-500 dark:text-gray-300 max-w-xs truncate">{{ $game->description }}</td>
+                                <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">{{ $game->release_year }}</td>
+                                <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">{{ $game->category ? $game->category->name : 'N/A' }}</td>
+                                <td class="px-4 py-4 whitespace-nowrap text-sm font-medium space-x-2">
+                                    <button class="bg-yellow-500 hover:bg-yellow-600 text-black px-3 py-1 rounded-md text-xs font-medium transition-colors" data-id="{{ $game->id }}" data-title="{{ $game->title }}" data-description="{{ $game->description }}" data-release_year="{{ $game->release_year }}" data-category_id="{{ $game->category_id }}" onclick="openEditModal(this)">Edit</button>
+                                    <form action="{{ route('games.destroy', $game) }}" method="POST" class="inline" onsubmit="return confirm('Are you sure you want to delete this game?')">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="bg-red-500 hover:bg-red-600 text-black px-3 py-1 rounded-md text-xs font-medium transition-colors">Delete</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
         </div>
         <!-- Edit Modal -->
         <div id="editModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden">
             <div class="flex items-center justify-center min-h-screen">
                 <div class="bg-white p-6 rounded shadow-lg w-1/2">
-                    <h3 class="text-lg font-semibold mb-4">Edit Game</h3>
+                    <h3 class="text-lg font-semibold mb-4 text-black">Edit Game</h3>
                     <form id="editForm" method="POST">
                         @csrf
                         @method('PUT')
                         <input type="hidden" name="id" id="editId">
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
-                                <label for="editTitle" class="block text-sm font-medium">Title</label>
+                                <label for="editTitle" class="block text-sm font-medium text-black">Title</label>
                                 <input type="text" name="title" id="editTitle" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm" required>
                             </div>
                             <div>
-                                <label for="editReleaseYear" class="block text-sm font-medium">Release Year</label>
+                                <label for="editReleaseYear" class="block text-sm font-medium text-black">Release Year</label>
                                 <input type="number" name="release_year" id="editReleaseYear" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm" required min="1900" max="{{ date('Y') }}">
                             </div>
                             <div class="md:col-span-2">
-                                <label for="editDescription" class="block text-sm font-medium">Description</label>
+                                <label for="editDescription" class="block text-sm font-medium text-black">Description</label>
                                 <textarea name="description" id="editDescription" rows="3" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm"></textarea>
                             </div>
                             <div>
-                                <label for="editCategoryId" class="block text-sm font-medium">Category</label>
+                                <label for="editCategoryId" class="block text-sm font-medium text-black">Category</label>
                                 <select name="category_id" id="editCategoryId" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
                                     <option value="">Select Category</option>
                                     @foreach($categories as $category)
