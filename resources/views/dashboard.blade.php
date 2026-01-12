@@ -60,6 +60,11 @@
                         <textarea name="description" id="description" rows="3" class="mt-1 block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"></textarea>
                         @error('description') <span class="text-red-500 text-sm mt-1 block">{{ $message }}</span> @enderror
                     </div>
+                    <div class="md:col-span-2">
+                        <label for="photo" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Photo (JPG/PNG, max 2MB)</label>
+                        <input type="file" name="photo" id="photo" accept="image/jpeg,image/png" class="mt-1 block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white">
+                        @error('photo') <span class="text-red-500 text-sm mt-1 block">{{ $message }}</span> @enderror
+                    </div>
                 </div>
                 <button type="submit" class="mt-6 bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-md font-medium transition-colors">Add Game</button>
             </form>
@@ -81,6 +86,15 @@
                     <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
                         @foreach($games as $game)
                             <tr class="hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+                                <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
+                                    @if($game->photo)
+                                        <img src="{{ asset('storage/' . $game->photo) }}" alt="{{ $game->title }}" class="w-10 h-10 rounded-full object-cover">
+                                    @else
+                                        <div class="w-10 h-10 rounded-full bg-gray-300 dark:bg-gray-600 flex items-center justify-center text-gray-700 dark:text-gray-300 font-semibold">
+                                            {{ substr($game->title, 0, 1) }}
+                                        </div>
+                                    @endif
+                                </td>
                                 <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">{{ $game->title }}</td>
                                 <td class="px-4 py-4 text-sm text-gray-500 dark:text-gray-300 max-w-xs truncate">{{ $game->description }}</td>
                                 <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">{{ $game->release_year }}</td>
@@ -147,6 +161,7 @@
         document.getElementById('editDescription').value = button.dataset.description;
         document.getElementById('editReleaseYear').value = button.dataset.release_year;
         document.getElementById('editCategoryId').value = button.dataset.category_id;
+        document.getElementById('editPhoto').value = ''; // Reset file input
         document.getElementById('editForm').action = '/games/' + button.dataset.id;
         document.getElementById('editModal').classList.remove('hidden');
     }
