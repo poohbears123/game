@@ -57,13 +57,7 @@ class GameController extends Controller
             'description' => 'nullable|string',
             'release_year' => 'required|integer|min:1900|max:' . date('Y'),
             'category_id' => 'nullable|exists:categories,id',
-            'photo' => 'nullable|image|mimes:jpg,png|max:2048',
         ]);
-
-        if ($request->hasFile('photo')) {
-            $photoPath = $request->file('photo')->store('games', 'public');
-            $validated['photo'] = $photoPath;
-        }
 
         Game::create($validated);
 
@@ -110,7 +104,17 @@ class GameController extends Controller
             $validated['photo'] = $photoPath;
         }
 
-        $game->update($validated);
+        $data = $validated;
+
+        if ($request->hasFile('photo')) {
+            // Delete old photo if exists
+            if ($game->photo && \Storage::disk('public')->exists($game->photo)) {
+                \Storage::disk('public')->delete($game->photo);
+            }
+            $data['photo'] = $request->file('photo')->store('photos', 'public');
+        }
+
+        $game->update($data);
 
         return redirect()->route('dashboard')->with('success', 'Game updated successfully!');
     }
@@ -121,8 +125,73 @@ class GameController extends Controller
     public function destroy(string $id): RedirectResponse
     {
         $game = Game::findOrFail($id);
-        $game->delete();
+        $game->delete(); // Soft delete
 
         return redirect()->route('dashboard')->with('success', 'Game deleted successfully!');
+    }
+
+    /**
+     * Display trashed games.
+     */
+    public function trash(): View
+    {
+        $trashedGames = Game::onlyTrashed()->with('category')->get();
+        $trashedCategories = Category::onlyTrashed()->get();
+
+        return view('trash', compact('trashedGames', 'trashedCategories'));
+    }
+
+    /**
+     * Restore the specified resource from trash.
+     */
+    public function restore(string $id): RedirectResponse
+    {
+        $game = Game::withTrashed()->findOrFail($id);
+        $game->restore();
+
+        return redirect()->route('games.trash')->with('success', 'Game restored successfully!');
+    }
+
+    /**
+     * Permanently delete the specified resource from storage.
+     */
+    public function forceDelete(string $id): RedirectResponse
+    {
+        $game = Game::withTrashed()->findOrFail($id);
+
+        // Delete photo if exists
+        if ($game->photo && \Storage::disk('public')->exists($game->photo)) {
+            \Storage::disk('public')->delete($game->photo);
+        }
+
+        $game->forceDelete();
+
+        return redirect()->route('games.trash')->with('success', 'Game permanently deleted!');
+    }
+
+    /**
+     * Export games to PDF.
+     */
+    public function export(Request $request)
+    {
+        $query = Game::with('category');
+
+        // Apply same filters as index
+        if ($request->has('search') && !empty($request->search)) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('title', 'like', '%' . $search . '%')
+                  ->orWhere('description', 'like', '%' . $search . '%');
+            });
+        }
+
+        if ($request->has('category_id') && !empty($request->category_id)) {
+            $query->where('category_id', $request->category_id);
+        }
+
+        $games = $query->get();
+
+        $pdf = Pdf::loadView('pdf.games', compact('games'));
+        return $pdf->download('games.pdf');
     }
 }
