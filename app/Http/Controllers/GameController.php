@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use App\Models\Game;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Response;
 use Illuminate\View\View;
 
 class GameController extends Controller

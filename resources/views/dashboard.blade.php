@@ -32,7 +32,7 @@
         <!-- Add Form -->
         <div class="bg-white dark:bg-gray-800 p-6 rounded-xl border border-neutral-200 dark:border-neutral-700 shadow-sm">
             <h3 class="text-xl font-semibold mb-6 text-gray-900 dark:text-white">Add New Game</h3>
-            <form action="{{ route('games.store') }}" method="POST" class="space-y-4">
+            <form action="{{ route('games.store') }}" method="POST" enctype="multipart/form-data" class="space-y-4">
                 @csrf
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
@@ -98,6 +98,15 @@
                     <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
                         @foreach($games as $game)
                             <tr class="hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+                                <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
+                                    @if($game->photo)
+                                        <img src="{{ asset('storage/' . $game->photo) }}" alt="Game Photo" class="w-10 h-10 rounded-full object-cover">
+                                    @else
+                                        <div class="w-10 h-10 rounded-full bg-gray-300 flex items-center justify-center text-gray-700 font-bold">
+                                            {{ strtoupper(substr($game->title, 0, 1)) }}
+                                        </div>
+                                    @endif
+                                </td>
                                 <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">{{ $game->title }}</td>
                                 <td class="px-4 py-4 text-sm text-gray-500 dark:text-gray-300 max-w-xs truncate">{{ $game->description }}</td>
                                 <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">{{ $game->release_year }}</td>
@@ -121,7 +130,7 @@
             <div class="flex items-center justify-center min-h-screen">
                 <div class="bg-white p-6 rounded shadow-lg w-1/2">
                     <h3 class="text-lg font-semibold mb-4 text-black">Edit Game</h3>
-                    <form id="editForm" method="POST">
+                    <form id="editForm" method="POST" enctype="multipart/form-data">
                         @csrf
                         @method('PUT')
                         <input type="hidden" name="id" id="editId">
