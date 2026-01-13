@@ -34,5 +34,9 @@ Route::middleware(['auth'])->group(function () {
         ->name('two-factor.show');
 
     Route::resource('games', App\Http\Controllers\GameController::class);
+    Route::get('games-trash', [App\Http\Controllers\GameController::class, 'trash'])->name('games.trash');
+    Route::patch('games/{id}/restore', [App\Http\Controllers\GameController::class, 'restore'])->name('games.restore');
+    Route::delete('games/{id}/force-delete', [App\Http\Controllers\GameController::class, 'forceDelete'])->name('games.forceDelete');
+    Route::get('games-export', [App\Http\Controllers\GameController::class, 'export'])->name('games.export');
     Route::resource('categories', App\Http\Controllers\CategoryController::class);
 });
