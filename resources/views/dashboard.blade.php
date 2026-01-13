@@ -133,28 +133,28 @@
         <!-- Edit Modal -->
         <div id="editModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden">
             <div class="flex items-center justify-center min-h-screen">
-                <div class="bg-white p-6 rounded shadow-lg w-1/2">
-                    <h3 class="text-lg font-semibold mb-4 text-black">Edit Game</h3>
+                <div class="bg-white dark:bg-gray-800 p-6 rounded shadow-lg w-1/2">
+                    <h3 class="text-lg font-semibold mb-4 text-gray-900 dark:text-white">Edit Game</h3>
                     <form id="editForm" method="POST" enctype="multipart/form-data">
                         @csrf
                         @method('PUT')
                         <input type="hidden" name="id" id="editId">
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
-                                <label for="editTitle" class="block text-sm font-medium text-black">Title</label>
-                                <input type="text" name="title" id="editTitle" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm" required>
+                                <label for="editTitle" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Title</label>
+                                <input type="text" name="title" id="editTitle" class="mt-1 block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white" required>
                             </div>
                             <div>
-                                <label for="editReleaseYear" class="block text-sm font-medium text-black">Release Year</label>
-                                <input type="number" name="release_year" id="editReleaseYear" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm" required min="1900" max="{{ date('Y') }}">
+                                <label for="editReleaseYear" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Release Year</label>
+                                <input type="number" name="release_year" id="editReleaseYear" class="mt-1 block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white" required min="1900" max="{{ date('Y') }}">
                             </div>
                             <div class="md:col-span-2">
-                                <label for="editDescription" class="block text-sm font-medium text-black">Description</label>
-                                <textarea name="description" id="editDescription" rows="3" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm"></textarea>
+                                <label for="editDescription" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Description</label>
+                                <textarea name="description" id="editDescription" rows="3" class="mt-1 block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"></textarea>
                             </div>
                             <div>
-                                <label for="editCategoryId" class="block text-sm font-medium text-black">Category</label>
-                                <select name="category_id" id="editCategoryId" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
+                                <label for="editCategoryId" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Category</label>
+                                <select name="category_id" id="editCategoryId" class="mt-1 block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white">
                                     <option value="">Select Category</option>
                                     @foreach($categories as $category)
                                         <option value="{{ $category->id }}">{{ $category->name }}</option>
@@ -162,14 +162,14 @@
                                 </select>
                             </div>
                             <div class="md:col-span-2">
-                                <label for="editPhoto" class="block text-sm font-medium text-black">Photo</label>
-                                <input type="file" name="photo" id="editPhoto" accept="image/*" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
-                                <p class="text-xs text-gray-500 mt-1">JPG/PNG only, max 2MB</p>
+                                <label for="editPhoto" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Photo</label>
+                                <input type="file" name="photo" id="editPhoto" accept="image/*" class="mt-1 block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white">
+                                <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">JPG/PNG only, max 2MB</p>
                             </div>
                         </div>
                         <div class="mt-4">
-                            <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded mr-2">Update</button>
-                            <button type="button" onclick="closeEditModal()" class="bg-gray-500 text-white px-4 py-2 rounded">Cancel</button>
+                            <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded mr-2 font-medium transition-colors">Update</button>
+                            <button type="button" onclick="closeEditModal()" class="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded font-medium transition-colors">Cancel</button>
                         </div>
                     </form>
                 </div>
