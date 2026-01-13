@@ -55,7 +55,13 @@ class GameController extends Controller
             'description' => 'nullable|string',
             'release_year' => 'required|integer|min:1900|max:' . date('Y'),
             'category_id' => 'nullable|exists:categories,id',
+            'photo' => 'nullable|image|mimes:jpg,png|max:2048',
         ]);
+
+        if ($request->hasFile('photo')) {
+            $photoPath = $request->file('photo')->store('games', 'public');
+            $validated['photo'] = $photoPath;
+        }
 
         Game::create($validated);
 
