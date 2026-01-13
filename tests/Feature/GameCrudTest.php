@@ -89,7 +89,7 @@ class GameCrudTest extends TestCase
         $response->assertRedirect(route('dashboard'));
         $response->assertSessionHas('success', 'Game deleted successfully!');
 
-        $this->assertDatabaseMissing('games', ['id' => $game->id]);
+        $this->assertSoftDeleted('games', ['id' => $game->id]);
     }
 
     public function test_game_creation_validation()
@@ -122,5 +122,52 @@ class GameCrudTest extends TestCase
 
         $this->assertInstanceOf(Category::class, $game->category);
         $this->assertEquals($category->id, $game->category->id);
+    }
+
+    public function test_user_can_view_trash()
+    {
+        $this->actingAs($this->user);
+
+        $category = Category::factory()->create();
+        $game = Game::factory()->create(['category_id' => $category->id]);
+        $game->delete(); // Soft delete
+
+        $response = $this->get(route('games.trash'));
+
+        $response->assertStatus(200);
+        $response->assertViewHas('trashedGames');
+        $response->assertViewHas('trashedCategories');
+    }
+
+    public function test_user_can_restore_game()
+    {
+        $this->actingAs($this->user);
+
+        $category = Category::factory()->create();
+        $game = Game::factory()->create(['category_id' => $category->id]);
+        $game->delete(); // Soft delete
+
+        $response = $this->patch(route('games.restore', $game));
+
+        $response->assertRedirect(route('games.trash'));
+        $response->assertSessionHas('success', 'Game restored successfully!');
+
+        $this->assertDatabaseHas('games', ['id' => $game->id, 'deleted_at' => null]);
+    }
+
+    public function test_user_can_force_delete_game()
+    {
+        $this->actingAs($this->user);
+
+        $category = Category::factory()->create();
+        $game = Game::factory()->create(['category_id' => $category->id]);
+        $game->delete(); // Soft delete
+
+        $response = $this->delete(route('games.forceDelete', $game));
+
+        $response->assertRedirect(route('games.trash'));
+        $response->assertSessionHas('success', 'Game permanently deleted!');
+
+        $this->assertDatabaseMissing('games', ['id' => $game->id]);
     }
 }
