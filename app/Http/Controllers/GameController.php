@@ -110,17 +110,7 @@ class GameController extends Controller
             $validated['photo'] = $photoPath;
         }
 
-        $data = $validated;
-
-        if ($request->hasFile('photo')) {
-            // Delete old photo if exists
-            if ($game->photo && \Storage::disk('public')->exists($game->photo)) {
-                \Storage::disk('public')->delete($game->photo);
-            }
-            $data['photo'] = $request->file('photo')->store('photos', 'public');
-        }
-
-        $game->update($data);
+        $game->update($validated);
 
         return redirect()->route('dashboard')->with('success', 'Game updated successfully!');
     }

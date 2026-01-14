@@ -13,12 +13,12 @@
 ## Phase 2 – Advanced (Soft Deletes & Trash, Export to PDF)
 
 ### 1. Soft Deletes & Trash Management
-- [ ] Update GameController destroy to use soft delete instead of permanent delete.
-- [ ] Add trash method to display trashed games.
-- [ ] Add restore and forceDelete methods for restoring and permanently deleting trashed games.
-- [ ] Add routes for trash, restore, forceDelete.
-- [ ] Update dashboard.blade.php to add "Trash" link in sidebar navigation.
-- [ ] Create resources/views/trash.blade.php view similar to dashboard but for trashed games, with restore and permanent delete options.
+- [x] Update GameController destroy to use soft delete instead of permanent delete.
+- [x] Add trash method to display trashed games.
+- [x] Add restore and forceDelete methods for restoring and permanently deleting trashed games.
+- [x] Add routes for trash, restore, forceDelete.
+- [x] Update dashboard.blade.php to add "Trash" link in sidebar navigation.
+- [x] Create resources/views/trash.blade.php view similar to dashboard but for trashed games, with restore and permanent delete options.
 
 ### 2. Export to PDF
 - [x] Add export method in GameController to generate PDF of current filtered games using dompdf.
@@ -29,4 +29,6 @@
 - [x] Ensure storage link is created for public files.
 - [x] Run any pending migrations.
 - [x] Test all new features manually and update tests accordingly.
+- [x] Fix failed test in GameCrudTest (undefined variable $data in update method).
+- [x] Show trashed categories in Trash view with restore and force delete options.
 - [x] Verify mobile responsiveness and flash messages.

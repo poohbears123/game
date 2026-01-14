@@ -89,4 +89,26 @@ class CategoryController extends Controller
 
         return redirect()->route('categories.index')->with('success', 'Category deleted successfully!');
     }
+
+    /**
+     * Restore the specified resource from trash.
+     */
+    public function restore(string $id): RedirectResponse
+    {
+        $category = Category::withTrashed()->findOrFail($id);
+        $category->restore();
+
+        return redirect()->route('games.trash')->with('success', 'Category restored successfully!');
+    }
+
+    /**
+     * Permanently delete the specified resource from storage.
+     */
+    public function forceDelete(string $id): RedirectResponse
+    {
+        $category = Category::withTrashed()->findOrFail($id);
+        $category->forceDelete();
+
+        return redirect()->route('games.trash')->with('success', 'Category permanently deleted!');
+    }
 }
