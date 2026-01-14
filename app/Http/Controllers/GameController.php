@@ -15,17 +15,21 @@ class GameController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request): View
+    public function index(Request $request): View|Response
     {
         $query = Game::with('category');
 
         // Apply search filter
-        if ($request->has('search') && !empty($request->search)) {
-            $query->where('title', 'like', '%' . $request->search . '%');
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('title', 'like', '%' . $search . '%')
+                  ->orWhere('description', 'like', '%' . $search . '%');
+            });
         }
 
         // Apply category filter
-        if ($request->has('category_id') && !empty($request->category_id)) {
+        if ($request->filled('category_id') && $request->category_id != '') {
             $query->where('category_id', $request->category_id);
         }
 
@@ -35,6 +39,13 @@ class GameController extends Controller
         $totalUsers = \App\Models\User::count(); // Static or dynamic third card
 
         $categories = Category::all();
+
+        // Check if export to PDF is requested
+        if ($request->filled('export') && $request->export === 'pdf') {
+            $pdf = Pdf::loadView('pdf.games', compact('games'));
+            $pdf->setPaper('a4', 'landscape');
+            return $pdf->download('games.pdf');
+        }
 
         return view('dashboard', compact('games', 'totalGames', 'totalCategories', 'totalUsers', 'categories'));
     }
@@ -178,7 +189,9 @@ class GameController extends Controller
             $query->where(function ($q) use ($search) {
                 $q->where('title', 'like', '%' . $search . '%')
                   ->orWhere('description', 'like', '%' . $search . '%');
-            });
+            })
+            ->orderByRaw("CASE WHEN title LIKE ? THEN 0 WHEN title LIKE ? THEN 1 ELSE 2 END", [$search . '%', '%' . $search . '%'])
+            ->orderBy('title');
         }
 
         if ($request->has('category_id') && !empty($request->category_id)) {
@@ -188,6 +201,7 @@ class GameController extends Controller
         $games = $query->get();
 
         $pdf = Pdf::loadView('pdf.games', compact('games'));
+        $pdf->setPaper('a4', 'landscape');
         return $pdf->download('games.pdf');
     }
 }

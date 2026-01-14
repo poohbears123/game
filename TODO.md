@@ -32,3 +32,5 @@
 - [x] Fix failed test in GameCrudTest (undefined variable $data in update method).
 - [x] Show trashed categories in Trash view with restore and force delete options.
 - [x] Verify mobile responsiveness and flash messages.
+- [x] Verify search
+- [x] Verify Export to PDF

@@ -11,7 +11,7 @@ Route::get('/', function () {
     return view('welcome');
 })->name('home');
 
-Route::get('dashboard', [App\Http\Controllers\DashboardController::class, 'index'])
+Route::get('dashboard', [App\Http\Controllers\GameController::class, 'index'])
     ->middleware(['auth', 'verified'])
     ->name('dashboard');
 
@@ -34,7 +34,6 @@ Route::middleware(['auth'])->group(function () {
         ->name('two-factor.show');
 
     Route::resource('games', App\Http\Controllers\GameController::class);
-    Route::get('games/export', [App\Http\Controllers\GameController::class, 'export'])->name('games.export');
     Route::get('games-trash', [App\Http\Controllers\GameController::class, 'trash'])->name('games.trash');
     Route::patch('games/{id}/restore', [App\Http\Controllers\GameController::class, 'restore'])->name('games.restore');
     Route::delete('games/{id}/force-delete', [App\Http\Controllers\GameController::class, 'forceDelete'])->name('games.forceDelete');

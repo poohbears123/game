@@ -170,4 +170,17 @@ class GameCrudTest extends TestCase
 
         $this->assertDatabaseMissing('games', ['id' => $game->id]);
     }
+
+    public function test_user_can_export_games_to_pdf()
+    {
+        $this->actingAs($this->user);
+
+        $category = Category::factory()->create();
+        Game::factory()->create(['category_id' => $category->id]);
+
+        $response = $this->get(route('dashboard', ['export' => 'pdf']));
+
+        $response->assertStatus(200);
+        $response->assertHeader('Content-Disposition', 'attachment; filename=games.pdf');
+    }
 }

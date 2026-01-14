@@ -71,7 +71,7 @@
         </div>
         <!-- Search & Filter -->
         <div class="bg-white dark:bg-gray-800 p-6 rounded-xl border border-neutral-200 dark:border-neutral-700 shadow-sm">
-            <h3 class="text-xl font-semibold mb-6 text-gray-900 dark:text-white">Search & Filter</h3>
+            <h3 class="text-xl font-semibold mb-6 text-gray-900 dark:text-white">Search Game & Filter</h3>
             <form method="GET" action="{{ route('dashboard') }}" class="flex flex-col md:flex-row gap-4 mb-4">
                 <input type="text" name="search" value="{{ request('search') }}" placeholder="Search by title..." class="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white">
                 <select name="category_id" class="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white">
@@ -82,7 +82,7 @@
                 </select>
                 <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md font-medium transition-colors">Search</button>
                 <a href="{{ route('dashboard') }}" class="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-md font-medium transition-colors">Clear</a>
-                <a href="{{ route('games.export') }}" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md font-medium transition-colors">Export to PDF</a>
+                <a href="{{ route('dashboard', array_merge(request()->query(), ['export' => 'pdf'])) }}" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md font-medium transition-colors">Export to PDF</a>
             </form>
         </div>
         <!-- Table -->
