@@ -15,7 +15,7 @@
     @endif
     <div class="flex h-full w-full flex-1 flex-col gap-6 rounded-xl">
         <!-- Statistics Cards -->
-        <div class="grid auto-rows-min gap-6 md:grid-cols-3">
+        <div class="grid grid-cols-3 gap-6">
             <div class="bg-white dark:bg-gray-800 p-6 rounded-xl border border-neutral-200 dark:border-neutral-700 shadow-sm hover:shadow-md transition-shadow">
                 <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Total Games</h3>
                 <p class="text-3xl font-bold text-blue-600 mt-2">{{ $totalGames }}</p>
